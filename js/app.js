@@ -161,7 +161,34 @@ document.addEventListener('DOMContentLoaded',() => {
             //Buscamos que al presionar el botón nos muestre el 'id' para poder usarlo 
             //para eliminar los registros.
             //console.log(e.target.parentElement.getAttribute('data-cita-id'));//traversing
-            let citaID = e.target.parentElement.getAttribute('data-cita-id');
+            let citaID = Number(e.target.parentElement.getAttribute('data-cita-id'));
+
+            //Borrar la información en IndexedDB mediante transacciones
+            let transaction = DB.transaction(['citas'],'readwrite');
+            let objectStore = transaction.objectStore('citas');
+            //console.log(objectStore);
+            let peticion = objectStore.delete(citaID);
+            //console.log(peticion);
+
+            //Borrar el <li> de los registros insertados en el DOM.
+            // Para eliminar en el DOM, debemos de ir a un padre más arriba de 
+            // lo que queremos eliminar.
+            transaction.oncomplete = () => {
+                e.target.parentElement.parentElement.removeChild(e.target.parentElement);
+
+                console.log(`Se eliminó la cita  con el ID: ${citaID}`);
+
+                if(!citas.firstChild) {
+                    //cuando no hay registros
+                    headingAdministra.textContent = 'Agrega citas para comenzar';
+                    let listado = document.createElement('p');
+                    listado.classList.add('text-center');
+                    listado.textContent = 'No hay registro';
+                    citas.appendChild(listado);
+                } else  {
+                    headingAdministra.textContent = 'Administra tus citas';
+                }
+            }
         }
     }
 })
