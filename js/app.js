@@ -21,15 +21,36 @@ document.addEventListener('DOMContentLoaded',() => {
 
     //Si hay un error enviarlo a la consola
     crearDB.onerror = function() {
-        console.log ('Hubo un error');
+        //console.log ('Hubo un error');
     }
     //Si todo está bien muestra en consola, y asignar la base de datos
     crearDB.onsuccess = function() {
-        console.log ('Todo listo');
+        //console.log ('Todo listo');
 
         //Asignar a la base de Datos
         DB = crearDB.result;
-        console.log(DB);
+        //console.log(DB);
     }
-    
+
+    //Este método solo se corre una vez, y es ideal para crear el Schema.
+    crearDB.onupgradeneeded = function(e) {
+        //console.log ('Solo una vez');
+        //El evento(e) es la misma base de datos
+        let db = e.target.result;
+
+        //Definir el ObjectStore, el cual toma 2 parámetros(el nombre de 
+        //la base datosy las opciones)
+        //keyPath es el índice de la base de datos
+        let objectStore = db.createObjectStore('citas', {keyPath: 'key', autoIncrement: true});
+
+        //Crear los índices y campos de la base de datos con 'createIndex', que tiene
+        // 3 parámetros(nombre,keyPath y opciones)
+        objectStore.createIndex('mascota','mascota',{unique: false});
+        objectStore.createIndex('cliente','cliente',{unique: false});
+        objectStore.createIndex('telefono','telefono',{unique: false});
+        objectStore.createIndex('fecha','fecha',{unique: false});
+        objectStore.createIndex('hora','hora',{unique: false});
+        objectStore.createIndex('sintomas','sintomas',{unique: false});
+    }
+
 })
