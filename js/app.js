@@ -1,7 +1,7 @@
 let DB;
 
 //Selectores de la Interfaz
-const form = document.querySelector('#form'),
+const form = document.querySelector('form'),
       nombreMascota = document.querySelector('#mascota'),
       nombreCliente = document.querySelector('#cliente'),
       telefono = document.querySelector('#telefono'),
@@ -53,4 +53,22 @@ document.addEventListener('DOMContentLoaded',() => {
         objectStore.createIndex('sintomas','sintomas',{unique: false});
     }
 
+    //Leer e insertar los datos del formulario cuando se envía
+    form.addEventListener('submit',agregarDatos);
+
+    function agregarDatos(e) {
+        e.preventDefault();
+
+        //crear un objeto para insertar los registros
+        const nuevaCita = {
+            mascota : nombreMascota.value,
+            cliente : nombreCliente.value,
+            telefono : telefono.value,
+            fecha : fecha.value,
+            hora : hora.value,
+            sintomas : sintomas.value
+        }
+        //console.log(nuevaCita)
+    
+    }
 })
