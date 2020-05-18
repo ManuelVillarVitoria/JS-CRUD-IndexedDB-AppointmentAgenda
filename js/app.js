@@ -76,21 +76,20 @@ document.addEventListener('DOMContentLoaded',() => {
         let objectStore = transaction.objectStore('citas');
         //console.log(objectStore);
         let peticion = objectStore.add(nuevaCita);
-
-        console.log(peticion);
+        //console.log(peticion);
 
         peticion.onsuccess = () => {
             form.reset();
         }
 
         transaction.oncomplete = () => {
-            console.log('Cita agregada');
+            //console.log('Cita agregada');
             //Llamamos de nuevo la función para mostrar más citas
             mostrarCitas();
         }
 
         transaction.onerror = () => {
-            console.log('Hubo un error');
+            //console.log('Hubo un error');
         }
     }
 
@@ -128,6 +127,15 @@ document.addEventListener('DOMContentLoaded',() => {
                     </span></p>
                 `;
 
+                //Botón de borrar
+                const botonBorrar = document.createElement('button');
+                botonBorrar.classList.add('borrar','btn','btn-danger');
+                botonBorrar.innerHTML = '<span aria-hidden="true"> x </span> Borrar';
+                //Hacemos referencia a la función. Es otro modo de hacerlo. Sino podríamos crear el botón 
+                //dentro del <li> de citaHTML y hacer Delegation.
+                botonBorrar.onclick = borrarCita;
+                citaHTML.appendChild(botonBorrar);
+
                 //append en el padre
                 citas.appendChild(citaHTML);
 
@@ -147,6 +155,13 @@ document.addEventListener('DOMContentLoaded',() => {
                 }
                 
             }
+        }
+
+        function borrarCita(e) {
+            //Buscamos que al presionar el botón nos muestre el 'id' para poder usarlo 
+            //para eliminar los registros.
+            //console.log(e.target.parentElement.getAttribute('data-cita-id'));//traversing
+            let citaID = e.target.parentElement.getAttribute('data-cita-id');
         }
     }
 })
